@@ -1,0 +1,347 @@
+[0] Arial
+[1] Arial Black
+[2] Arial Bold
+[3] Arial Bold Italic
+[4] Arial Italic
+[5] Arial Narrow
+[6] Arial Narrow Bold
+[7] Arial Narrow Bold Italic
+[8] Arial Narrow Italic
+[9] Bahnschrift
+[10] Bahnschrift Bold
+[11] Bahnschrift Bold Condensed
+[12] Bahnschrift Bold SemiCondensed
+[13] Bahnschrift Condensed
+[14] Bahnschrift Light
+[15] Bahnschrift Light Condensed
+[16] Bahnschrift Light SemiCondensed
+[17] Bahnschrift Regular
+[18] Bahnschrift SemiBold
+[19] Bahnschrift SemiBold Condensed
+[20] Bahnschrift SemiBold SemiCondensed
+[21] Bahnschrift SemiCondensed
+[22] Bahnschrift SemiLight
+[23] Bahnschrift SemiLight Condensed
+[24] Bahnschrift SemiLight SemiCondensed
+[25] Book Antiqua
+[26] Book Antiqua Bold
+[27] Book Antiqua Bold Italic
+[28] Book Antiqua Italic
+[29] Bookman Old Style
+[30] Bookman Old Style Bold
+[31] Bookman Old Style Bold Italic
+[32] Bookman Old Style Italic
+[33] Bookshelf Symbol 7
+[34] Calibri
+[35] Calibri Bold
+[36] Calibri Bold Italic
+[37] Calibri Italic
+[38] Calibri Light
+[39] Calibri Light Italic
+[40] Cambria
+[41] Cambria Bold
+[42] Cambria Bold Italic
+[43] Cambria Italic
+[44] Cambria Math
+[45] Candara
+[46] Candara Bold
+[47] Candara Bold Italic
+[48] Candara Italic
+[49] Candara Light
+[50] Candara Light Italic
+[51] Cascadia Code Bold
+[52] Cascadia Code Bold Italic
+[53] Cascadia Code ExtraLight
+[54] Cascadia Code ExtraLight Italic
+[55] Cascadia Code Italic
+[56] Cascadia Code Light
+[57] Cascadia Code Light Italic
+[58] Cascadia Code Regular
+[59] Cascadia Code SemiBold
+[60] Cascadia Code SemiBold Italic
+[61] Cascadia Code SemiLight
+[62] Cascadia Code SemiLight Italic
+[63] Cascadia Mono Bold
+[64] Cascadia Mono Bold Italic
+[65] Cascadia Mono ExtraLight
+[66] Cascadia Mono ExtraLight Italic
+[67] Cascadia Mono Italic
+[68] Cascadia Mono Light
+[69] Cascadia Mono Light Italic
+[70] Cascadia Mono Regular
+[71] Cascadia Mono SemiBold
+[72] Cascadia Mono SemiBold Italic
+[73] Cascadia Mono SemiLight
+[74] Cascadia Mono SemiLight Italic
+[75] Century
+[76] Century Gothic
+[77] Century Gothic Bold
+[78] Century Gothic Bold Italic
+[79] Century Gothic Italic
+[80] Comic Sans MS
+[81] Comic Sans MS Bold
+[82] Comic Sans MS Bold Italic
+[83] Comic Sans MS Italic
+[84] Consolas
+[85] Consolas Bold
+[86] Consolas Bold Italic
+[87] Consolas Italic
+[88] Constantia
+[89] Constantia Bold
+[90] Constantia Bold Italic
+[91] Constantia Italic
+[92] Corbel
+[93] Corbel Bold
+[94] Corbel Bold Italic
+[95] Corbel Italic
+[96] Corbel Light
+[97] Corbel Light Italic
+[98] Courier New
+[99] Courier New Bold
+[100] Courier New Bold Italic
+[101] Courier New Italic
+[102] Dialog.bold
+[103] Dialog.bolditalic
+[104] Dialog.italic
+[105] Dialog.plain
+[106] DialogInput.bold
+[107] DialogInput.bolditalic
+[108] DialogInput.italic
+[109] DialogInput.plain
+[110] Dubai Bold
+[111] Dubai Light
+[112] Dubai Medium
+[113] Dubai Regular
+[114] Ebrima
+[115] Ebrima Bold
+[116] Franklin Gothic Medium
+[117] Franklin Gothic Medium Italic
+[118] Gabriola
+[119] Gadugi
+[120] Gadugi Bold
+[121] Garamond
+[122] Garamond Bold
+[123] Garamond Italic
+[124] Georgia
+[125] Georgia Bold
+[126] Georgia Bold Italic
+[127] Georgia Italic
+[128] Impact
+[129] Ink Free
+[130] Javanese Text
+[131] Leelawadee
+[132] Leelawadee Bold
+[133] Leelawadee UI
+[134] Leelawadee UI Bold
+[135] Leelawadee UI Semilight
+[136] Lucida Console
+[137] Lucida Sans Unicode
+[138] MS Gothic
+[139] MS PGothic
+[140] MS Reference Sans Serif
+[141] MS Reference Specialty
+[142] MS UI Gothic
+[143] MT Extra
+[144] MV Boli
+[145] Malgun Gothic
+[146] Malgun Gothic Bold
+[147] Malgun Gothic Semilight
+[148] Marlett
+[149] Microsoft Himalaya
+[150] Microsoft JhengHei
+[151] Microsoft JhengHei Bold
+[152] Microsoft JhengHei Light
+[153] Microsoft JhengHei UI
+[154] Microsoft JhengHei UI Bold
+[155] Microsoft JhengHei UI Light
+[156] Microsoft New Tai Lue
+[157] Microsoft New Tai Lue Bold
+[158] Microsoft PhagsPa
+[159] Microsoft PhagsPa Bold
+[160] Microsoft Sans Serif
+[161] Microsoft Tai Le
+[162] Microsoft Tai Le Bold
+[163] Microsoft Uighur
+[164] Microsoft Uighur Bold
+[165] Microsoft YaHei UI Light
+[166] Microsoft Yahei UI
+[167] Microsoft Yahei UI Bold
+[168] Microsoft Yi Baiti
+[169] MingLiU-ExtB
+[170] MingLiU_HKSCS-ExtB
+[171] MingLiU_MSCS-ExtB
+[172] Mongolian Baiti
+[173] Monospaced.bold
+[174] Monospaced.bolditalic
+[175] Monospaced.italic
+[176] Monospaced.plain
+[177] Monotype Corsiva
+[178] Myanmar Text
+[179] Myanmar Text Bold
+[180] NSimSun
+[181] Nirmala Text
+[182] Nirmala Text Bold
+[183] Nirmala Text Semilight
+[184] Nirmala UI
+[185] Nirmala UI Bold
+[186] Nirmala UI Semilight
+[187] Noto Sans SC
+[188] Noto Sans SC Black
+[189] Noto Sans SC Bold
+[190] Noto Sans SC DemiLight
+[191] Noto Sans SC Light
+[192] Noto Sans SC Medium
+[193] Noto Sans SC Regular
+[194] Noto Sans SC Thin
+[195] Noto Serif SC
+[196] Noto Serif SC Black
+[197] Noto Serif SC Bold
+[198] Noto Serif SC ExtraLight
+[199] Noto Serif SC Light
+[200] Noto Serif SC Medium
+[201] Noto Serif SC Regular
+[202] Noto Serif SC SemiBold
+[203] PMingLiU-ExtB
+[204] Palatino Linotype
+[205] Palatino Linotype Bold
+[206] Palatino Linotype Bold Italic
+[207] Palatino Linotype Italic
+[208] Sans Serif Collection
+[209] SansSerif.bold
+[210] SansSerif.bolditalic
+[211] SansSerif.italic
+[212] SansSerif.plain
+[213] Segoe Fluent Icons
+[214] Segoe MDL2 Assets
+[215] Segoe Print
+[216] Segoe Print Bold
+[217] Segoe Script
+[218] Segoe Script Bold
+[219] Segoe UI
+[220] Segoe UI Black
+[221] Segoe UI Black Italic
+[222] Segoe UI Bold
+[223] Segoe UI Bold Italic
+[224] Segoe UI Emoji
+[225] Segoe UI Historic
+[226] Segoe UI Italic
+[227] Segoe UI Light
+[228] Segoe UI Light Italic
+[229] Segoe UI Semibold
+[230] Segoe UI Semibold Italic
+[231] Segoe UI Semilight
+[232] Segoe UI Semilight Italic
+[233] Segoe UI Symbol
+[234] Segoe UI Variable
+[235] Segoe UI Variable Display
+[236] Segoe UI Variable Display Bold
+[237] Segoe UI Variable Display Light
+[238] Segoe UI Variable Display Semibold
+[239] Segoe UI Variable Display Semilight
+[240] Segoe UI Variable Small
+[241] Segoe UI Variable Small Bold
+[242] Segoe UI Variable Small Light
+[243] Segoe UI Variable Small Semibold
+[244] Segoe UI Variable Small Semilight
+[245] Segoe UI Variable Text
+[246] Segoe UI Variable Text Bold
+[247] Segoe UI Variable Text Light
+[248] Segoe UI Variable Text Semibold
+[249] Segoe UI Variable Text Semilight
+[250] Serif.bold
+[251] Serif.bolditalic
+[252] Serif.italic
+[253] Serif.plain
+[254] SimSun
+[255] SimSun-ExtB
+[256] SimSun-ExtG
+[257] Sitka Banner
+[258] Sitka Banner Bold
+[259] Sitka Banner Bold Italic
+[260] Sitka Banner Italic
+[261] Sitka Banner Semibold
+[262] Sitka Banner Semibold Italic
+[263] Sitka Display
+[264] Sitka Display Bold
+[265] Sitka Display Bold Italic
+[266] Sitka Display Italic
+[267] Sitka Display Semibold
+[268] Sitka Display Semibold Italic
+[269] Sitka Heading
+[270] Sitka Heading Bold
+[271] Sitka Heading Bold Italic
+[272] Sitka Heading Italic
+[273] Sitka Heading Semibold
+[274] Sitka Heading Semibold Italic
+[275] Sitka Small
+[276] Sitka Small Bold
+[277] Sitka Small Bold Italic
+[278] Sitka Small Italic
+[279] Sitka Small Semibold
+[280] Sitka Small Semibold Italic
+[281] Sitka Subheading
+[282] Sitka Subheading Bold
+[283] Sitka Subheading Bold Italic
+[284] Sitka Subheading Italic
+[285] Sitka Subheading Semibold
+[286] Sitka Subheading Semibold Italic
+[287] Sitka Text
+[288] Sitka Text Bold
+[289] Sitka Text Bold Italic
+[290] Sitka Text Italic
+[291] Sitka Text Semibold
+[292] Sitka Text Semibold Italic
+[293] Sylfaen
+[294] Symbol
+[295] Tahoma
+[296] Tahoma Bold
+[297] Times New Roman
+[298] Times New Roman Bold
+[299] Times New Roman Bold Italic
+[300] Times New Roman Italic
+[301] Trebuchet MS
+[302] Trebuchet MS Bold
+[303] Trebuchet MS Bold Italic
+[304] Trebuchet MS Italic
+[305] Verdana
+[306] Verdana Bold
+[307] Verdana Bold Italic
+[308] Verdana Italic
+[309] Webdings
+[310] Wingdings
+[311] Wingdings 2
+[312] Wingdings 3
+[313] Yu Gothic Bold
+[314] Yu Gothic Light
+[315] Yu Gothic Medium
+[316] Yu Gothic Regular
+[317] Yu Gothic UI Bold
+[318] Yu Gothic UI Light
+[319] Yu Gothic UI Regular
+[320] Yu Gothic UI Semibold
+[321] Yu Gothic UI Semilight
+[322] 仿宋
+[323] 华文中宋
+[324] 华文仿宋
+[325] 华文宋体
+[326] 华文彩云
+[327] 华文新魏
+[328] 华文楷体
+[329] 华文琥珀
+[330] 华文细黑
+[331] 华文行楷
+[332] 华文隶书
+[333] 宋体
+[334] 幼圆
+[335] 微软雅黑
+[336] 微软雅黑 Bold
+[337] 微软雅黑 Light
+[338] 新宋体
+[339] 方正姚体
+[340] 方正舒体
+[341] 楷体
+[342] 等线
+[343] 等线 Bold
+[344] 等线 Light
+[345] 隶书
+[346] 黑体
