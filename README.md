@@ -1,8 +1,8 @@
 # ESP32系统简单案例
-+ 1. c3_demo :
+1. c3_demo :
   该示例演示硬件定时器，WIFI扫描，连接WIFI的用法。
-+ 2. ajusttime:
+2. ajusttime:
      演示通过WIFI获取当前时间，并随时获取当前时间。
-  3. c3_relay
+3. c3_relay
      通过单片机控制继电器，以实现弱电控制强电。
   
