@@ -12,6 +12,8 @@
 // #define ESP32_4848S040_86BOX_GUITION
 // #define ESP32_8048S043
 // #define ESP32_8048S070
+// #define ESP32_C3_OLED_12864
+// #define ESP32_C3_OLED_7240
 // #define ESP32_LCDKIT_SPI
 // #define ESP32_LCDKIT_PAR8A
 // #define ESP32_LCDKIT_PAR8B
@@ -27,6 +29,7 @@
 // #define JC1060P470
 // #define JC3248W535
 // #define JC3636W518
+// #define JC4880P433
 // #define JC8012P4A1
 // #define LILYGO_T_DECK
 // #define LILYGO_T_DECK_PLUS
@@ -52,6 +55,7 @@
 // #define WAVESHARE_ESP32_S3_LCD_1_3
 // #define WAVESHARE_ESP32_S3_LCD_1_3_PRISM
 // #define WAVESHARE_ESP32_S3_LCD_1_46
+// #define WAVESHARE_ESP32_S3_LCD_1_47
 // #define WAVESHARE_ESP32_S3_LCD_2_8
 // #define WAVESHARE_ESP32_S3_TOUCH_AMOLED_1_64
 // #define WAVESHARE_ESP32_S3_TOUCH_AMOLED_1_8
@@ -234,7 +238,6 @@ Arduino_ESP32RGBPanel *rgbpanel = new Arduino_ESP32RGBPanel(
 Arduino_RGB_Display *gfx = new Arduino_RGB_Display(
     480 /* width */, 480 /* height */, rgbpanel, 1 /* rotation */, true /* auto_flush */,
     bus, GFX_NOT_DEFINED /* RST */, st7701_type9_init_operations, sizeof(st7701_type9_init_operations));
-
 #elif defined(ESP32_8048S043)
 #define GFX_DEV_DEVICE ESP32_8048S043
 #define GFX_BL 2
@@ -266,6 +269,30 @@ Arduino_ESP32RGBPanel *rgbpanel = new Arduino_ESP32RGBPanel(
     0 /* de_idle_high */, 0 /* pclk_idle_high */, 0 /* bounce_buffer_size_px */);
 Arduino_RGB_Display *gfx = new Arduino_RGB_Display(
     800 /* width */, 480 /* height */, rgbpanel, 0 /* rotation */, true /* auto_flush */);
+
+#elif defined(ESP32_C3_OLED_12864)
+#define GFX_DEV_DEVICE ESP32_C3_OLED_12864
+#include <Wire.h>
+#define DEV_DEVICE_INIT()         \
+  {                               \
+    Wire.begin(5 /* SDA */, 6 /* SCL */); \
+  }
+Arduino_DataBus *bus = new Arduino_Wire(0x3C /* i2c_addr */, 0x00 /* commandPrefix */, 0x40 /* dataPrefix */, &Wire /* wire */);
+Arduino_G *g = new Arduino_SSD1306(bus, GFX_NOT_DEFINED /* RST */, 128 /* width */, 64 /* height */);
+#define CANVAS
+Arduino_GFX *gfx = new Arduino_Canvas_Mono(128 /* width */, 64 /* height */, g, 0 /* output_x */, 0 /* output_y */, true /* verticalByte */);
+
+#elif defined(ESP32_C3_OLED_7240)
+#define GFX_DEV_DEVICE ESP32_C3_OLED_7240
+#include <Wire.h>
+#define DEV_DEVICE_INIT()         \
+  {                               \
+    Wire.begin(5 /* SDA */, 6 /* SCL */); \
+  }
+Arduino_DataBus *bus = new Arduino_Wire(0x3C /* i2c_addr */, 0x00 /* commandPrefix */, 0x40 /* dataPrefix */, &Wire /* wire */);
+Arduino_G *g = new Arduino_SSD1306(bus, GFX_NOT_DEFINED /* RST */, 72 /* width */, 40 /* height */);
+#define CANVAS
+Arduino_GFX *gfx = new Arduino_Canvas_Mono(72 /* width */, 40 /* height */, g, 0 /* output_x */, 0 /* output_y */, true /* verticalByte */);
 
 #elif defined(ESP32_LCDKIT_SPI)
 #define GFX_DEV_DEVICE ESP32_LCDKIT_SPI
@@ -505,7 +532,7 @@ Arduino_DataBus *bus = new Arduino_ESP32QSPI(
 Arduino_GFX *g = new Arduino_AXS15231B(
     bus, GFX_NOT_DEFINED /* RST */, 0 /* rotation */, false /* IPS */, 320 /* width */, 480 /* height */,
     0 /* col offset 1 */, 0 /* row offset 1 */, 0 /* col offset 2 */, 0 /* row offset 2 */,
-    axs15231b_320480_init_operations, sizeof(axs15231b_320480_init_operations));
+    axs15231b_320480_type1_init_operations, sizeof(axs15231b_320480_type1_init_operations));
 #define CANVAS
 Arduino_Canvas *gfx = new Arduino_Canvas(
     320 /* width */, 480 /* height */, g, 0 /* output_x */, 0 /* output_y */, 0 /* rotation */);
@@ -516,6 +543,25 @@ Arduino_Canvas *gfx = new Arduino_Canvas(
 Arduino_DataBus *bus = new Arduino_ESP32QSPI(
     10 /* CS */, 9 /* SCK */, 11 /* D0 */, 12 /* D1 */, 13 /* D2 */, 14 /* D3 */);
 Arduino_GFX *gfx = new Arduino_ST77916(bus, 47 /* RST */, 0 /* rotation */, true /* IPS */, 360 /* width */, 360 /* height */);
+#elif defined(JC4880P433)
+#define GFX_DEV_DEVICE JC4880P433
+#define GFX_BL 23
+#define RGB_PANEL
+
+Arduino_ESP32DSIPanel *bus = new Arduino_ESP32DSIPanel(
+     12  /* hsync_pulse_width */, 42  /* hsync_back_porch */, 42  /* hsync_front_porch */,
+    2   /* vsync_pulse_width */, 8   /* vsync_back_porch */, 166 /* vsync_front_porch */,
+    34000000 /* prefer_speed - 34 MHz conforme configuração do projeto */);
+
+    Arduino_DSI_Display *gfx = new Arduino_DSI_Display(
+    480 /* width */, 
+    800 /* height */, 
+    bus, 
+    0,      // rotation
+    true,   // IPS
+    5,  // RST pin (DISP_RST)
+    st7701_dsi_init_operations, 
+    sizeof(st7701_dsi_init_operations) / sizeof(lcd_init_cmd_t));
 
 #elif defined(JC8012P4A1)
 #define GFX_DEV_DEVICE JC8012P4A1
@@ -545,7 +591,7 @@ Arduino_DSI_Display *gfx = new Arduino_DSI_Display(
     }
 #define GFX_BL 42
 Arduino_DataBus *bus = new Arduino_HWSPI(11 /* DC */, 12 /* CS */, 40 /* SCK */, 41 /* MOSI */, 38 /* MISO */);
-Arduino_GFX *gfx = new Arduino_ST7789(bus, GFX_NOT_DEFINED /* RST */, 1 /* rotation */, false /* IPS */);
+Arduino_GFX *gfx = new Arduino_ST7789(bus, GFX_NOT_DEFINED /* RST */, 1 /* rotation */, true /* IPS */);
 
 #elif defined(LILYGO_T_DECK_PLUS)
 #define GFX_DEV_DEVICE LILYGO_T_DECK_PLUS
@@ -604,7 +650,7 @@ Arduino_GFX *gfx = new Arduino_RM67162(bus, 17 /* RST */, 0 /* rotation */);
 Arduino_DataBus *bus = new Arduino_ESP32QSPI(
     10 /* CS */, 12 /* SCK */, 11 /* D0 */, 13 /* D1 */, 14 /* D2 */, 15 /* D3 */);
 Arduino_GFX *g = new Arduino_CO5300(
-    bus, 17 /* RST */, 0 /* rotation */, false /* IPS */, 280, 456,
+    bus, 17 /* RST */, 0 /* rotation */, 280, 456,
     20 /* col offset 1 */, 0 /* row offset 1 */, 180 /* col_offset2 */, 24 /* row_offset2 */);
 #define CANVAS
 Arduino_Canvas *gfx = new Arduino_Canvas(
@@ -796,6 +842,14 @@ Arduino_GFX *g = new Arduino_SPD2010(bus, GFX_NOT_DEFINED /* RST */);
 Arduino_Canvas *gfx = new Arduino_Canvas(
     412 /* width */, 412 /* height */, g, 0 /* output_x */, 0 /* output_y */, 0 /* rotation */);
 
+#elif defined(WAVESHARE_ESP32_S3_LCD_1_47)
+#define GFX_DEV_DEVICE WAVESHARE_ESP32_S3_LCD_1_47
+#define GFX_BL 48
+Arduino_DataBus *bus = new Arduino_ESP32SPI(41 /* DC */, 42 /* CS */, 40 /* SCK */, 45 /* MOSI */, GFX_NOT_DEFINED /* MISO */);
+Arduino_GFX *gfx = new Arduino_ST7789(
+    bus, 39 /* RST */, 0 /* rotation */, true /* IPS */, 172 /* width */, 320 /* height */,
+    34 /* col offset 1 */, 0 /* row offset 1 */, 34 /* col offset 2 */, 0 /* row offset 2 */);
+
 #elif defined(WAVESHARE_ESP32_S3_LCD_2_8)
 #define GFX_DEV_DEVICE WAVESHARE_ESP32_S3_LCD_2_8
 #define GFX_BL 5
@@ -807,7 +861,7 @@ Arduino_GFX *gfx = new Arduino_ST7789(bus, 39 /* RST */, 0 /* rotation */, true 
 Arduino_DataBus *bus = new Arduino_ESP32QSPI(
     9 /* CS */, 10 /* SCK */, 11 /* D0 */, 12 /* D1 */, 13 /* D2 */, 14 /* D3 */);
 Arduino_GFX *g = new Arduino_CO5300(
-    bus, 21 /* RST */, 0 /* rotation */, false /* IPS */, 280 /* width */, 456 /* height */,
+    bus, 21 /* RST */, 0 /* rotation */, 280 /* width */, 456 /* height */,
     20 /* col offset 1 */, 0 /* row offset 1 */, 180 /* col_offset2 */, 24 /* row_offset2 */);
 #define CANVAS
 Arduino_Canvas *gfx = new Arduino_Canvas(

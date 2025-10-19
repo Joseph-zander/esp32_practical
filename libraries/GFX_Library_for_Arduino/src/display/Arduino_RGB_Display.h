@@ -409,6 +409,7 @@ static const uint8_t gc9503v_type2_init_operations[] = {
 
     DELAY, 120};
 
+
 static const uint8_t st7701_type1_init_operations[] = {
     BEGIN_WRITE,
     WRITE_COMMAND_8, 0xFF,
