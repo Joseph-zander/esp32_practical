@@ -32,34 +32,6 @@ void log(const char* title, const char* text) {
   Serial.println(text);
 }
 
-/**
-*  格式化RTC时间为字符串（YYYY-MM-DD HH:MM:SS），使用如下：
-    char timeBuffer[20];
-    formatDateTime(rtc->now(), timeBuffer);
-    Serial.print("周期启动于: ");
-    Serial.println(timeBuffer);
-*/
-void formatDateTime(DateTime dt, char* buffer) {
-  // 年（4位）
-  intToStr(dt.year(), buffer, 4);
-  buffer[4] = '-';
-  // 月（2位）
-  intToStr(dt.month(), buffer + 5, 2);
-  buffer[7] = '-';
-  // 日（2位）
-  intToStr(dt.day(), buffer + 8, 2);
-  buffer[10] = ' ';
-  // 时（2位）
-  intToStr(dt.hour(), buffer + 11, 2);
-  buffer[13] = ':';
-  // 分（2位）
-  intToStr(dt.minute(), buffer + 14, 2);
-  buffer[16] = ':';
-  // 秒（2位）
-  intToStr(dt.second(), buffer + 17, 2);
-  buffer[19] = '\0'; // 确保字符串终止
-}
-
 // 将整数转换为字符串，填充前导零
 void intToStr(int num, char* str, int width) {
   for (int i = width - 1; i >= 0; i--) {
