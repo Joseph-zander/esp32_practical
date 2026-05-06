@@ -47,7 +47,11 @@ const char* htmlContent = R"rawliteral(
 )rawliteral";
 
 void IRAM_ATTR onTimer() {
+<<<<<<< HEAD
     //Serial.print("检查WIFI连接状态。。。");
+=======
+    Serial.print("检查WIFI连接状态。。。");
+>>>>>>> 3917c360dbca106feaf8ebe21988918127f332cc
     connectToWifi();
 }
 
