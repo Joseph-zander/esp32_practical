@@ -11,9 +11,15 @@ int numCredentials = sizeof(wifiCredentials) / sizeof(wifiCredentials[0]);
 
 bool connectToWifi() {
   if (WiFi.status() == WL_CONNECTED) {
+<<<<<<< HEAD
       return true;
   }
   Serial.println("WIFI已连上!");
+=======
+      Serial.println("WIFI已连上!");
+      return true;
+  }
+>>>>>>> 3917c360dbca106feaf8ebe21988918127f332cc
   // 循环尝试每个凭证
   for (int i = 0; i < numCredentials; i++) {
     Serial.print("尝试连接: ");
