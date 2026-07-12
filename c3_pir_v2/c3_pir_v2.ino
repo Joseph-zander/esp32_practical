@@ -41,5 +41,5 @@ void loop() {
   Serial.print(sensorVal);
   Serial.print(" | 输出电平: ");
   Serial.println(digitalRead(OUTPUT_PIN));
-  delay(1000);
+  delay(2000);
 }
