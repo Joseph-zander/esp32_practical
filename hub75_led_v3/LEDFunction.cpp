@@ -71,39 +71,33 @@ void drawFlowDash() {
   }
 }
 
-
-/**
-*  设置静态文件
-***/
 void drawCenteredText(const char* text, int y) {
-  int len = strlen(text);
-  int charCount = len / 3;
-  int totalWidth = charCount * charWidth + (charCount - 1) * charSpacing;
+  if (!text || strlen(text) == 0) return; // 安全检查：如果是空文字则不处理
+
+  // 1. 让 U8g2 自动计算整串 UTF-8 文字的实际像素总宽度（完美支持中英混排，绝不越界）
+  int totalWidth = u8g2.getUTF8Width(text); 
+
+  // 2. 根据屏幕总宽度 W，直接算出居中的起始坐标 X
   int x = (W - totalWidth) / 2;
 
-  for (int i = 0; i < len; i += 3) {
-    char buf[4] = { text[i], text[i + 1], text[i + 2], '\0' };
-    u8g2.setCursor(x, y -1);
-    u8g2.print(buf);
-    x += charWidth + charSpacing;
-  }
+  // 3. 设置好光标，直接一句话一次性输出整行文字
+  u8g2.setCursor(x, y - 1);
+  u8g2.print(text); 
 }
 
-/**
-*  设置滚动文字
-***/
 void drawScrollingText(const char* text, int y) {
-  int len = strlen(text);
-  int charCount = len / 3;
-  int totalWidth = charCount * charWidth + (charCount - 1) * charSpacing;
+  if (!text || strlen(text) == 0) return; // 安全检查
+
+  // 1. 让 U8g2 自动计算整串 UTF-8 文字的实际总像素宽度（绝不越界，完美支持中英数）
+  int totalWidth = u8g2.getUTF8Width(text); 
+
+  // 2. 计算一个完整的滚动周期总宽度：文字总宽 + 屏幕宽度 W
   int cycleWidth = totalWidth + W;
 
+  // 3. 根据你原有的 textOffset 变量，计算出整串文字当前应该从哪个 X 坐标开始显示
   int x = W - (textOffset % cycleWidth);
 
-  for (int i = 0; i < len; i += 3) {
-    char buf[4] = { text[i], text[i + 1], text[i + 2], '\0' };
-    u8g2.setCursor(x, y -1);
-    u8g2.print(buf);
-    x += charWidth + charSpacing;
-  }
+  // 4. 设置光标，直接一次性整体输出整行文字
+  u8g2.setCursor(x, y - 1);
+  u8g2.print(text); 
 }
