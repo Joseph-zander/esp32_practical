@@ -9,7 +9,7 @@
 extern MatrixPanel_I2S_DMA *matrix;
 
 // 全局变量定义
-extern U8G2_FOR_ADAFRUIT_GFX u8g2;   // ← 补上这个定义
+extern U8G2_FOR_ADAFRUIT_GFX u8g2; 
 
 //定义MCU的GPIO口
 #define R1 4
