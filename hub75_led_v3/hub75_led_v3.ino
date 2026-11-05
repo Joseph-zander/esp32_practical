@@ -58,7 +58,6 @@ void setup() {
   // 1. 调用模块化封装后的异步服务器初始化函数
   initAsyncWebServer();
 
-
   // 初始化 HUB75 引脚配置
   HUB75_I2S_CFG::i2s_pins pins = { R1, G1, B1, R2, G2, B2, A, B, C, D, E, LAT, OE, CLK };
   HUB75_I2S_CFG cfg(W, H, 1, pins);
@@ -79,15 +78,13 @@ void setup() {
       ;
   }
   matrix->setBrightness8(35);  // 设置亮度
-}
-matrix->setBrightness8(20);  // 设置亮度
-// === 关键：初始化中文字体桥接库 ===
-u8g2.begin(*matrix);
-// 设置文泉驿 12 点阵中文字体（需确保你的字串属于 GB2312 编码）
-u8g2.setFont(u8g2_font_wqy12_t_gb2312);
+  // === 关键：初始化中文字体桥接库 ===
+  u8g2.begin(*matrix);
+  // 设置文泉驿 12 点阵中文字体（需确保你的字串属于 GB2312 编码）
+  u8g2.setFont(u8g2_font_wqy12_t_gb2312);
 
-// 3. 屏幕刷新挂载到 Core 1
-xTaskCreatePinnedToCore(LedDisplayTask, "LedTask", 4096, NULL, 1, NULL, 1);
+  // 3. 屏幕刷新挂载到 Core 1
+  xTaskCreatePinnedToCore(LedDisplayTask, "LedTask", 4096, NULL, 1, NULL, 1);
 }
 
 void loop() {
