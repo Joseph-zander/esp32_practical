@@ -12,10 +12,13 @@
 // 声明外部可引用的异步服务器实例
 extern AsyncWebServer server;
 extern Preferences localStore;
+// 改进：增加 WiFi 状态与切片函数声明
+extern bool isWiFiActive;
 
 // 初始化异步 Web 服务器的函数声明
 void initAsyncWebServer();
 void loadSavedText();
 void writeText();
 void loadSavedText();
+void handleWiFiAsyncProgress();
 #endif
