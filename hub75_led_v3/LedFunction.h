@@ -61,5 +61,4 @@ extern int PERIOD;
 void drawFlowDash();
 void drawCenteredText(const char* text, int y);
 void drawScrollingText(const char* text, int y);
-
 #endif

@@ -3,7 +3,7 @@
 #include "webserver.h"
 
 // 独立的 LED 硬件渲染任务（绑定到 Core 1 独占运行）
-void LedDisplayTask(void *pvParameters) {
+void LedDisplayTask(void* pvParameters) {
   while (1) {
     matrix->fillScreen(0);
     drawFlowDash();
@@ -17,9 +17,9 @@ void LedDisplayTask(void *pvParameters) {
       uint16_t activeColor;
       switch (colorIndex) {
         case 0: activeColor = matrix->color565(0, 255, 255); break;    // 1. 冰蓝色（清爽通透）
-        case 1: activeColor = matrix->color565(0, 255, 0); break;    // 2. 纯绿色（经典护眼）
-        case 2: activeColor = matrix->color565(255, 255, 255); break;    // 3.  纯白色（极简明亮）
-        case 3: activeColor = matrix->color565(255, 160, 16); break;  // 4. 香槟金
+        case 1: activeColor = matrix->color565(0, 255, 0); break;      // 2. 纯绿色（经典护眼）
+        case 2: activeColor = matrix->color565(255, 255, 255); break;  // 3.  纯白色（极简明亮）
+        case 3: activeColor = matrix->color565(255, 160, 16); break;   // 4. 香槟金
         case 4:
         default: activeColor = matrix->color565(255, 0, 255); break;  // 5. 紫色
       }
@@ -34,24 +34,15 @@ void LedDisplayTask(void *pvParameters) {
     if (currentPage == 0) {
       textOffset += scrollSpeed;
     }
-    if (millis() - pageStartTime >= pageDuration) {
-      currentPage = (currentPage + 1) % 2;
-      pageStartTime = millis();
-      textOffset = 0;
-    }
-    /**
-    * pdMS_TO_TICKS: 将毫秒（ms）单位转换为 FreeRTOS 的系统时钟节拍数（Ticks）
-    * vTaskDelay: 它是非阻塞式的, 在延时的这段时间内，CPU 不会死等，而是立刻去执行其他排队中的低优先级或同优先级任务
-    */
-    vTaskDelay(pdMS_TO_TICKS(scrollDelay));
   }
 }
+
 
 void setup() {
   Serial.begin(115200);
   // 针对 N16R8 物理 USB 的强行唤醒延迟：
   // 刚下载完程序或开机时，电脑和芯片需要时间建立 USB 握手，这里死等 3 秒
-  delay(2000);
+  delay(3000);
 
   Serial.println("\r\n=========================================");
   Serial.println("★ ESP32-S3 N16R8 固件启动成功 ★");
@@ -67,18 +58,18 @@ void setup() {
   // 1. 调用模块化封装后的异步服务器初始化函数
   initAsyncWebServer();
 
+
   // 初始化 HUB75 引脚配置
   HUB75_I2S_CFG::i2s_pins pins = { R1, G1, B1, R2, G2, B2, A, B, C, D, E, LAT, OE, CLK };
   HUB75_I2S_CFG cfg(W, H, 1, pins);
   cfg.driver = HUB75_I2S_CFG::FM6126A;  // 指定驱动芯片
   cfg.i2sspeed = HUB75_I2S_CFG::HZ_10M;
   cfg.double_buff = true;  // 开启双缓冲，彻底杜绝闪烁
-
   // ===================【针对闪烁的关键改动点】===================
   // 如果默认是 false，请改为 true；如果默认是 true，请改为 false。
   // 改变时钟相位可以彻底解决数据锁存交替时的“毛刺”和“微闪”
   cfg.clkphase = false;
-  // ============================================================
+
 
   // 初始化矩阵屏
   matrix = new MatrixPanel_I2S_DMA(cfg);
@@ -88,16 +79,16 @@ void setup() {
       ;
   }
   matrix->setBrightness8(35);  // 设置亮度
+}
+matrix->setBrightness8(20);  // 设置亮度
+// === 关键：初始化中文字体桥接库 ===
+u8g2.begin(*matrix);
+// 设置文泉驿 12 点阵中文字体（需确保你的字串属于 GB2312 编码）
+u8g2.setFont(u8g2_font_wqy12_t_gb2312);
 
-  // === 关键：初始化中文字体桥接库 ===
-  u8g2.begin(*matrix);
-  // 设置文泉驿 12 点阵中文字体（需确保你的字串属于 GB2312 编码）
-  u8g2.setFont(u8g2_font_wqy12_t_gb2312);
-
-  // 3. 屏幕刷新挂载到 Core 1
-  xTaskCreatePinnedToCore(LedDisplayTask, "LedTask", 4096, NULL, 1, NULL, 1);
+// 3. 屏幕刷新挂载到 Core 1
+xTaskCreatePinnedToCore(LedDisplayTask, "LedTask", 4096, NULL, 1, NULL, 1);
 }
 
 void loop() {
-
 }

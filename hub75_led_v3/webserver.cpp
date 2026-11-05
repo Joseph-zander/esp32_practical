@@ -1,11 +1,11 @@
 #include "WebServer.h"
 #include "LedFunction.h"
-
+#include <ESPmDNS.h>
 
 // 定义监听 80 端口的异步 Web 服务器实例
 AsyncWebServer server(80);
 
-// 封装的网页 HTML 源码（支持 UTF-8 编码，集成配置表单和前端动态时钟）
+// 封装的网页 HTML 源码
 const char* htmlContent = R"rawliteral(
 <!DOCTYPE html>
 <html>
@@ -55,70 +55,35 @@ static WiFiMulti wifiMulti;
 Preferences localStore;
 bool isWiFiActive = true;   // 当前 Wi-Fi 射频是否处于开启状态
 
-//系统初始化时，从闪存中读取保存的文字，如果没保存过则使用默认值
+// 异步连接控制变量
+static bool isServerConfigured = false;
+static int currentAttempt = 0;
+const int AP_COUNT = 6;
+const int MAX_ATTEMPTS_PER_AP = 10;
+const int TOTAL_MAX_ATTEMPTS = AP_COUNT * MAX_ATTEMPTS_PER_AP;
+
+// 系统初始化时，从闪存中读取保存的文字
 void loadSavedText() {
-  // 以只读模式（true）打开名为 "led_storage" 的分区
-  localStore.begin("led_storage", true);
-
-  // 读取 "p1" 键对应的值，如果闪存里是空的，则使用第二个参数作为“默认保底值”
-  page1Text = localStore.getString("p1", "中大国际，欢迎您！");
-  page2Text = localStore.getString("p2", "工程部宣");
-
-  localStore.end();  // 关闭存储分区
-  Serial.println("[闪存] 已成功从本地存储中恢复历史文字配置！");
+    localStore.begin("led_storage", true);
+    page1Text = localStore.getString("p1", "中大国际，欢迎您！");
+    page2Text = localStore.getString("p2", "工程部宣");
+    localStore.end();
+    Serial.println("[闪存] 已成功从本地存储中恢复历史文字配置！");
 }
 
+// 同步将其强制锁进 Flash 闪存
 void writeText() {
-  //同步将其强制锁进 Flash 闪存
-  localStore.begin("led_storage", false);
-  localStore.putString("p1", page1Text);
-  localStore.putString("p2", page2Text);
-  localStore.end();
-  Serial.println("[闪存] 新文字已安全同步保存至持久化闪存分区！");
+    localStore.begin("led_storage", false);
+    localStore.putString("p1", page1Text);
+    localStore.putString("p2", page2Text);
+    localStore.end();
+    Serial.println("[闪存] 新文字已安全同步保存至持久化闪存分区！");
 }
 
-/**
- * 初始化网络（支持多 WiFi 轮询测试，且限制最大尝试次数）
- */
-void initAsyncWebServer() {
-  long startTime = millis();
-  while (!Serial && (millis() - startTime < 3000)) {
-    delay(10);
-  }
+// 配置并启动 Web 服务器相关路由（仅在初次获取 IP 时调用一次）
+void startWebServices() {
+    if (isServerConfigured) return; // 避免重复注册
 
-  Serial.println("\n[WiFi] 正在初始化多后台 WiFi 扫描机制...");
-  WiFi.mode(WIFI_STA);
-
-  // 1. 定义和录入多组 Wi-Fi 账号密码
-  const int AP_COUNT = 6;  // 这里写下你一共配置了多少组 Wi-Fi
-  wifiMulti.addAP("Magic Pro", "20031999");
-  wifiMulti.addAP("ZD_Office", "12345678");
-  wifiMulti.addAP("ZD_Office", "87654321");
-  wifiMulti.addAP("ZD_Office", "88888888");
-  wifiMulti.addAP("ZDGJ_FreeWifi", "88888888");
-  wifiMulti.addAP("XiaoBao-WIFI", "20031999");
-
-  // 2. 核心限次逻辑：单组最大测试 10 次，换算为整体最大轮询总次数
-  const int MAX_ATTEMPTS_PER_AP = 10;
-  const int TOTAL_MAX_ATTEMPTS = AP_COUNT * MAX_ATTEMPTS_PER_AP;
-  int currentAttempt = 0;
-  bool isConnected = false;
-
-  Serial.println("[WiFi] 开始轮流匹配可用 Wi-Fi 网络（每组最多测试 10 次）...");
-
-  // 3. 执行限次轮询检测
-  while (currentAttempt < TOTAL_MAX_ATTEMPTS) {
-    if (wifiMulti.run() == WL_CONNECTED) {
-      isConnected = true;
-      break;  // 只要连上任意一个，立即跳出循环
-    }
-    currentAttempt++;
-    Serial.printf("[WiFi] 正在尝试连接... (当前总进度: %d/%d)\n", currentAttempt, TOTAL_MAX_ATTEMPTS);
-    delay(200);  // 每次尝试间歇 1 秒，给芯片足够的基带握手响应时间
-  }
-
-  // 4. 根据连接结果进行分支处理
-  if (isConnected) {
     Serial.println("\n[WiFi] 成功建立网络连接！");
     Serial.print("Connected to SSID: ");
     Serial.println(WiFi.SSID());
@@ -127,44 +92,106 @@ void initAsyncWebServer() {
 
     // 开启本地域名解析
     if (MDNS.begin("led")) {
-      Serial.println("[mDNS] 域名解析服务启动成功！浏览器访问: http://led.local");
-      MDNS.addService("http", "tcp", 80);
+        Serial.println("[mDNS] 域名解析服务启动成功！浏览器访问: http://led.local");
+        MDNS.addService("http", "tcp", 80);
     }
 
     // 注册根目录路由
     server.on("/", HTTP_GET, [](AsyncWebServerRequest* request) {
-      request->send(200, "text/html", htmlContent);
+        request->send(200, "text/html", htmlContent);
     });
 
     // 注册表单接收接口
     server.on("/set", HTTP_POST, [](AsyncWebServerRequest* request) {
-      if (request->hasParam("p1", true) && request->hasParam("p2", true)) {
-        page1Text = request->getParam("p1", true)->value();
-        page2Text = request->getParam("p2", true)->value();
-        //保存文本
-        writeText();
-        textOffset = 0;
-        String successHtml = "<html><head><meta charset='UTF-8'></head><body><center><h3>配置已成功接收！正在应用并返回...</h3></center><script>setTimeout(function(){window.location.href='/';},1500);</script></body></html>";
-        request->send(200, "text/html", successHtml);
-        Serial.println("通过异步 Web 收到新配置内容并成功更新！");
-      } else {
-        request->send(400, "text/plain", "Bad Form Parameter");
-      }
+        if (request->hasParam("p1", true) && request->hasParam("p2", true)) {
+            page1Text = request->getParam("p1", true)->value();
+            page2Text = request->getParam("p2", true)->value();
+            writeText();
+            textOffset = 0; // 重置点阵屏滚动偏移量
+            String successHtml = "<html><head><meta charset='UTF-8'></head><body><center><h3>配置已成功接收！正在应用并返回...</h3></center><script>setTimeout(function(){window.location.href='/';},1500);</script></body></html>";
+            request->send(200, "text/html", successHtml);
+            Serial.println("通过异步 Web 收到新配置内容并成功更新！");
+        } else {
+            request->send(400, "text/plain", "Bad Form Parameter");
+        }
     });
 
     // 404 页面
     server.onNotFound([](AsyncWebServerRequest* request) {
-      request->send(404, "text/plain", "Not Found");
+        request->send(404, "text/plain", "Not Found");
     });
 
-    // 启动异步 HTTP 服务器
     server.begin();
     Serial.println("Async HTTP server started.");
+    isServerConfigured = true;
+}
 
-  } else {
-    // 🔥 熔断保护：所有 Wi-Fi 尝试满 10 次均失败，放弃连网
-    WiFi.disconnect(true);  //1. 关闭 Wi-Fi 模块节省功耗，防止干扰点阵屏硬件
-    WiFi.mode(WIFI_OFF);    //2. 彻底关闭 Wi-Fi 射频硬件核心（WIFI_OFF），切断功耗与射频干扰
-    isWiFiActive = false;
-  }
+// WiFi 事件回调函数：捕获底层事件，实现真正的异步
+void onWiFiEvent(WiFiEvent_t event) {
+    switch (event) {
+        case ARDUINO_EVENT_WIFI_STA_GOT_IP:
+            startWebServices(); // 拿到IP后，立即在后台拉起服务器
+            break;
+        case ARDUINO_EVENT_WIFI_STA_DISCONNECTED:
+            Serial.println("[WiFi] 物理连接断开，底层尝试自动关联或等待下次多网轮询...");
+            break;
+        default:
+            break;
+    }
+}
+
+/**
+ * 瞬间初始化的网络函数（零阻塞，直接返回）
+ */
+void initAsyncWebServer() {
+    Serial.println("\n[WiFi] 正在异步初始化多后台 WiFi 扫描机制...");
+    
+    // 1. 注册网络事件监听
+    WiFi.onEvent(onWiFiEvent);
+    WiFi.mode(WIFI_STA);
+
+    // 2. 录入多组 Wi-Fi 账号密码
+    wifiMulti.addAP("Magic Pro", "20031999");
+    wifiMulti.addAP("ZD_Office", "12345678");
+    wifiMulti.addAP("ZD_Office", "87654321");
+    wifiMulti.addAP("ZD_Office", "88888888");
+    wifiMulti.addAP("ZDGJ_FreeWifi", "88888888");
+    wifiMulti.addAP("XiaoBao-WIFI", "20031999");
+
+    currentAttempt = 0;
+    isWiFiActive = true;
+    
+    Serial.println("[WiFi] 异步配置就绪，LED 主程序开始运行，连接动作将在主循环切片执行。");
+}
+
+/**
+ * 【关键核心】需要在你的主项目全局 loop() 中高频调用的非阻塞轮询函数
+ */
+void handleWiFiAsyncProgress() {
+    // 如果已经连上，或者 WiFi 已经被熔断关闭，则直接跳过，零开销
+    if (WiFi.status() == WL_CONNECTED || !isWiFiActive) {
+        return;
+    }
+
+    // 利用时间戳切片代替 delay()，每隔 500ms 驱动一次 wifiMulti 状态机
+    static unsigned long lastWiFiCheckTime = 0;
+    if (millis() - lastWiFiCheckTime < 500) {
+        return; 
+    }
+    lastWiFiCheckTime = millis();
+
+    // 尝试进行一次非阻塞的 WiFi 匹配尝试
+    if (wifiMulti.run() == WL_CONNECTED) {
+        // 连接成功，底层会触发 ARDUINO_EVENT_WIFI_STA_GOT_IP 事件去启动服务器
+        return;
+    }
+    // 计数器累加
+    currentAttempt++;
+    Serial.printf("[WiFi] 正在后台匹配可用 Wi-Fi... (当前切片进度: %d/%d)\n", currentAttempt, TOTAL_MAX_ATTEMPTS);
+    if (currentAttempt >= TOTAL_MAX_ATTEMPTS) {
+        Serial.println("\n[WiFi] 熔断保护触发：所有预设 WiFi 均不可用，已放弃连接并关闭射频。");
+        WiFi.disconnect(true);
+        WiFi.mode(WIFI_OFF);
+        isWiFiActive = false;
+    }
 }
