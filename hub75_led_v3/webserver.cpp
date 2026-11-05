@@ -82,8 +82,10 @@ void writeText() {
 
 // 配置并启动 Web 服务器相关路由（仅在初次获取 IP 时调用一次）
 void startWebServices() {
-    if (isServerConfigured) return; // 避免重复注册
-
+    if (isServerConfigured) {
+        return; // 避免重复注册
+    }
+    
     Serial.println("\n[WiFi] 成功建立网络连接！");
     Serial.print("Connected to SSID: ");
     Serial.println(WiFi.SSID());
